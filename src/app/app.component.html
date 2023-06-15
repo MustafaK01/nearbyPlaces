@@ -1,76 +1,150 @@
 <div class="container">
-  <div class="row mt-1 justify-content-center">
-    <div class="col-9">
-      <div class="row" style="margin-left: 8%;">
-        <div class="col-3">
-          <label for="inp" class="inp">
-            <input type="text" id="inp" placeholder="&nbsp;">
-            <span class="label">Latitude</span>
-            <span class="focus-bg"></span>
-          </label>
-      </div>
-        <div class="col-3">
-          <label for="inp" class="inp">
-            <input type="text" id="inp" placeholder="&nbsp;">
-            <span class="label">Longitude</span>
-            <span class="focus-bg"></span>
-          </label>
+  <div class="row">
+    <div class="col-8">
+      <div class="row mt-1 justify-content-center">
+        <div style="margin-right: 20%;" class="col-10">
+          <div class="row">
+            <div class="col-3">
+              <label for="inp" class="inp">
+                <input [(ngModel)]="latitude" disabled type="text" id="inp" placeholder="&nbsp;">
+                <span class="label">Latitude</span>
+                <span class="focus-bg"></span>
+              </label>
+          </div>
+            <div class="col-3">
+              <label for="inp" class="inp">
+                <input disabled [(ngModel)]="longitude" type="text" id="inp" placeholder="&nbsp;">
+                <span class="label">Longitude</span>
+                <span class="focus-bg"></span>
+              </label>
+            </div>
+            <div class="col-3">
+              <label for="inp" class="inp">
+                <input [(ngModel)]="radius" type="text" id="inp" placeholder="&nbsp;">
+                <span class="label">Radius (m)</span>
+                <span class="focus-bg"></span>
+              </label>
+            </div>
+            <div class="col-3">
+              <button style="margin-top:20px;" type="button" class="btn btn-primary"><i class="fas fa-search" aria-hidden="true"></i></button>
+          </div>
+          </div>
         </div>
-        <div class="col-3">
-          <label for="inp" class="inp">
-            <input type="text" id="inp" placeholder="&nbsp;">
-            <span class="label">Radius</span>
-            <span class="focus-bg"></span>
-          </label>
+      </div>
+      <div class="row mt-1 justify-content-center">
+        <div class="col-12" style="margin-right: 30%;">
+          <div class="row">
+            <div class="col-12"> 
+                <div class="card">
+                  <div class="card-body">
+                    <google-map height="380px"
+                    width="700px"
+                    [center]="center"
+                    [zoom]="zoom"
+                    (mapClick)="addMarker($event)">
+        
+                    <map-marker *ngFor="let markerPosition of markerPositions"
+                      [position]="markerPosition"
+                      [options]="markerOptions">
+                    </map-marker>
+                  </google-map> 
+                  <!-- <a href="#" class="btn btn-danger mt-1"><i class="fas fa-trash" aria-hidden="true"></i></a>       -->
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-3">
-          <button style="margin-top:20px;" type="button" class="btn btn-primary"><i class="fas fa-search" aria-hidden="true"></i></button>
       </div>
-      </div>
-    </div>
-  </div>
-  <div class="row mt-1 justify-content-center">
-    <div class="col-9">
-      <div class="row">
-        <div class="col-12"> 
-            <div class="card">
-              <div class="card-body">
-                <google-map height="380px"
-                width="780px"
-                [center]="center"
-                [zoom]="zoom"
-                (mapClick)="addMarker($event)">
-    
-                <map-marker *ngFor="let markerPosition of markerPositions"
-                  [position]="markerPosition"
-                  [options]="markerOptions">
-                </map-marker>
-              </google-map> 
-              <!-- <a href="#" class="btn btn-danger mt-1"><i class="fas fa-trash" aria-hidden="true"></i></a>       -->
+      <div class="row mt-2 mb-2 justify-content-center">
+        <div class="col-12" style="margin-right: 25%;">
+          <div style="margin-right: 0%" class="row">
+            <div class="col-3">
+              <button class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
+            </div>
+            <div class="col-3">
+              <button class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-3">
+              <button class="button-23" role="button"><i class="fas fa-university fa-lg" aria-hidden="true"></i></button>
+            </div>
+            <div class="col-3">
+              <button class="button-23" role="button">
+                <i class="fas fa-coffee" aria-hidden="true"></i>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row mt-2 mb-2 justify-content-center">
-    <div class="col-9">
-      <div style="margin-left: 9%" class="row">
-        <div class="col-3">
-          <button class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
+    <div class="col-4">
+      <div class="row mt-1 justify-content-center"></div>
+      <div class="row mt-5 justify-content-center">
+        <div class="col-12">
+          <h6>Nearby Places In {{radius}}m To Location</h6>
         </div>
-        <div class="col-3">
-          <button class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
-        </div>
-        <div class="col-3">
-          <button class="button-23" role="button"><i class="fas fa-university fa-lg" aria-hidden="true"></i></button>
-        </div>
-        <div class="col-3">
-          <button class="button-23" role="button">
-            <i class="fas fa-coffee" aria-hidden="true"></i>
-          </button>
+      </div>
+      <div class="row mt-2 mb-2 justify-content-center">
+        <div style="overflow-y: scroll; height: 400px">
+<!--  -->
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              This is some text within a card body.
+            </div>
+          </div>
+<!--  -->
         </div>
       </div>
     </div>
   </div>
+
 </div>
