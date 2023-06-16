@@ -20,13 +20,13 @@
             </div>
             <div class="col-3">
               <label for="inp" class="inp">
-                <input [(ngModel)]="radius" type="text" id="inp" placeholder="&nbsp;">
+                <input [(ngModel)]="radius" (input)="updateRadius()" type="text" id="inp" placeholder="&nbsp;">
                 <span class="label">Radius (m)</span>
                 <span class="focus-bg"></span>
               </label>
             </div>
             <div class="col-3">
-              <button style="margin-top:20px;" type="button" class="btn btn-primary"><i class="fas fa-search" aria-hidden="true"></i></button>
+              <button style="margin-top:20px;" (click)="searchByLatLngAndRadius()" type="button" class="btn btn-primary"><i class="fas fa-search" aria-hidden="true"></i></button>
           </div>
           </div>
         </div>
@@ -37,18 +37,26 @@
             <div class="col-12"> 
                 <div class="card">
                   <div class="card-body">
-                    <google-map height="380px"
-                    width="700px"
-                    [center]="center"
-                    [zoom]="zoom"
-                    (mapClick)="addMarker($event)">
-        
-                    <map-marker *ngFor="let markerPosition of markerPositions"
-                      [position]="markerPosition"
-                      [options]="markerOptions">
-                    </map-marker>
-                  </google-map> 
-                  <!-- <a href="#" class="btn btn-danger mt-1"><i class="fas fa-trash" aria-hidden="true"></i></a>       -->
+                    <google-map height="380px" width="700px" 
+                    [center]="center" [zoom]="5" 
+                    (mapClick)="selectLocation($event)">
+                      
+                      <map-marker *ngFor="let marker of nearByPlaces" 
+                      [position]="{ lat: marker.latitude, lng: marker.longitude }" 
+                      [options]="mapOptions.nearbyPlacesMarkerOptions">
+                      </map-marker>
+                      <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
+                      [position]="{ lat: latitude, lng: longitude }" 
+                      [options]="mapOptions.selectedLocationMarkerOptions"></map-marker>
+                      
+                      <ng-template [ngIf]="latitude !== 0 && longitude !== 0">
+                        <map-circle 
+                        [center]="{ lat: latitude, lng: longitude }" 
+                        [radius]="mapOptions.circleOptions.radius" 
+                        [options]="mapOptions.circleOptions"></map-circle>
+                      </ng-template>
+
+                    </google-map>
                 </div>
               </div>
             </div>
@@ -86,59 +94,9 @@
       <div class="row mt-2 mb-2 justify-content-center">
         <div style="overflow-y: scroll; height: 400px">
 <!--  -->
-          <div class="card">
+          <div *ngFor="let place of nearByPlaces" class="card">
             <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
+                {{place.name}}
             </div>
           </div>
 <!--  -->
