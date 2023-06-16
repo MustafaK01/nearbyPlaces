@@ -10,7 +10,7 @@ export class CircleOptions {
 }
   
 export class MapOptions {
-    radius: number = 1000;
+    // radius: number = 1500;
     selectedLocationMarkerOptions: MarkerOptions = {
         draggable: false,
         icon: {
@@ -25,11 +25,11 @@ export class MapOptions {
         }
     };
 
-    circleOptions: CircleOptions = {
-        strokeColor: 'blue',
-        fillColor: 'gray',
-        radius: this.radius
-    };
+    // circleOptions: CircleOptions = {
+    //     strokeColor: 'blue',
+    //     fillColor: 'gray',
+    //     radius: this.radius
+    // };
 
 
 }

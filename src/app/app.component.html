@@ -26,8 +26,13 @@
               </label>
             </div>
             <div class="col-3">
-              <button style="margin-top:20px;" (click)="searchByLatLngAndRadius()" type="button" class="btn btn-primary"><i class="fas fa-search" aria-hidden="true"></i></button>
-          </div>
+              <button style="margin-top:20px;" (click)="searchByLatLngAndRadius()" type="button" class="btn btn-primary">
+                <i class="fas fa-search" aria-hidden="true"></i>
+              </button>
+              <button (click)="clearMap()" style="margin-top:20px; margin-left:5px ;" class="btn btn-danger">
+                <i class="fas fa-trash" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -52,8 +57,8 @@
                       <ng-template [ngIf]="latitude !== 0 && longitude !== 0">
                         <map-circle 
                         [center]="{ lat: latitude, lng: longitude }" 
-                        [radius]="mapOptions.circleOptions.radius" 
-                        [options]="mapOptions.circleOptions"></map-circle>
+                        [radius]="circleOptions.radius" 
+                        [options]="circleOptions"></map-circle>
                       </ng-template>
 
                     </google-map>
