@@ -45,11 +45,18 @@
                     <google-map height="380px" width="700px" 
                     [center]="center" [zoom]="5" 
                     (mapClick)="selectLocation($event)">
-                      
-                      <map-marker *ngFor="let marker of nearByPlaces" 
-                      [position]="{ lat: marker.latitude, lng: marker.longitude }" 
-                      [options]="mapOptions.nearbyPlacesMarkerOptions">
-                      </map-marker>
+                      <ng-container *ngFor="let marker of nearByPlaces">
+                        <map-marker [position]="{ lat: marker.latitude, lng: marker.longitude }" 
+                                    [options]="mapOptions.nearbyPlacesMarkerOptions" 
+                                    *ngIf="showAll">
+                        </map-marker>
+                      </ng-container>
+                      <ng-container *ngFor="let marker of restaurants">
+                        <map-marker [position]="{ lat: marker.latitude, lng: marker.longitude }" 
+                                    [options]="mapOptions.nearbyPlacesMarkerOptions" 
+                                    *ngIf="showRestaurants">
+                        </map-marker>
+                      </ng-container>
                       <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
                       [position]="{ lat: latitude, lng: longitude }" 
                       [options]="mapOptions.selectedLocationMarkerOptions"></map-marker>
@@ -72,17 +79,17 @@
         <div class="col-12" style="margin-right: 25%;">
           <div style="margin-right: 0%" class="row">
             <div class="col-3">
-              <button class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
+              <button (click)="showHealthCenters()" class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
             </div>
             <div class="col-3">
-              <button class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
+              <button (click)="showRestaurants()" class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
             </div>
             <div class="col-3">
-              <button class="button-23" role="button"><i class="fas fa-university fa-lg" aria-hidden="true"></i></button>
+              <button (click)="showSupermarkets()" class="button-23" role="button"><i class="fas fa-cart-shopping fa-lg" aria-hidden="true"></i></button>
             </div>
             <div class="col-3">
-              <button class="button-23" role="button">
-                <i class="fas fa-coffee" aria-hidden="true"></i>
+              <button (click)="showAtms()" class="button-23" role="button">
+                <img src="../assets/atm_icon.png" alt="" style="height: 26px;" srcset="">
               </button>
             </div>
           </div>
@@ -109,5 +116,5 @@
       </div>
     </div>
   </div>
-
 </div>
+<app-spinner></app-spinner>
