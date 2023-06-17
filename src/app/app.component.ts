@@ -89,6 +89,11 @@ export class AppComponent implements OnInit{
 
   searchByLatLngAndRadius(){
     this.nearByPlaces = [];
+    if(this.radius>20000){
+      this.toastr.error('Radius cannot be greater than 20km ', 'WARNING');
+      return;
+    }
+
     if(this.checkInputs()){ 
       this.toastr.error('Please provide latitude and longitude', 'ERROR');
       return;
