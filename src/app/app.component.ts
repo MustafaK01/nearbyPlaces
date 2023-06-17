@@ -16,28 +16,27 @@ export class AppComponent implements OnInit{
   longitude = 0;
   radius = 1500; 
   circleUpdated = false;
+  searchedInRadius = false;
 
   nearByPlaces: NearByPlace[] = [];
   healthCenters:NearByPlace[] = [];
   restaurants:NearByPlace[] = [];
-  superMarkets:NearByPlace[] = [];
+  stores:NearByPlace[] = [];
   atms:NearByPlace[] = [];
+  duplicateNearbyPlaces:NearByPlace[] = []; 
 
-  showAll = true;
-
-  selectedShowAtms = false;
-  selectedShowSuperMarkets=false;
-  selectedShowHealthCenters=false;
-  selectedShowRestaurants=false;
-
-  center: google.maps.LatLngLiteral = { lat: 49, lng: 12 };
+  center: google.maps.LatLngLiteral = { lat: 41, lng: 35 };
   mapOptions: MapOptions;
 
   constructor(private http: HttpClient,private spinnerService:SpinnerService, private toastr: ToastrService) {
     this.mapOptions = new MapOptions();
    }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void {
+    this.nearByPlaces.forEach(element=>{
+      this.duplicateNearbyPlaces.push(element);
+    });
+    }
 
   circleOptions = {
     strokeColor: 'blue',
@@ -51,62 +50,34 @@ export class AppComponent implements OnInit{
   }
   
   selectLocation(event: google.maps.MapMouseEvent) {
+    if(this.latitude!=0 && this.longitude!=0){ 
+      this.clearMap();
+    }
     this.latitude = event.latLng.lat();
     this.longitude = event.latLng.lng();
-  }
-
-  filterHealthCenters(place){
-    let healthCenterKeyWords = ["hospital","doctor"]
-    this.filterPlace(place,healthCenterKeyWords,this.healthCenters);
-  }
-
-  filterRestaurants(place){
-    let restaurantKeywords = ["restaurant","bar","cafe"];
-    this.filterPlace(place,restaurantKeywords,this.restaurants);  
-  }
-
-  filterSupermarkets(place){
-    let supermarketKeywords = ["supermarket"];
-    this.filterPlace(place,supermarketKeywords,this.superMarkets);  
-  }
-
-  filterAtms(place){
-    let atmKeywords = ["atm","finance","bank"];
-    this.filterPlace(place,atmKeywords,this.atms);  
   }
 
   filterPlaces(place){
     this.filterHealthCenters(place);
     this.filterRestaurants(place);
-    this.filterSupermarkets(place);
+    this.filterStores(place);
     this.filterAtms(place);
   }
 
-  showRestaurants(){
-    this.selectedShowRestaurants=true;
-    this.showAll=false;
-    this.selectedShowAtms=false;
-    this.selectedShowHealthCenters=false;
-    this.selectedShowSuperMarkets=false;
+  showPlaces(placeType) {
+    this.spinnerService.requestStarted();
+    const placesMap = {
+      'atms': this.atms,
+      'healthCenters': this.healthCenters,
+      'restaurants': this.restaurants,
+      'stores': this.stores
+    };
+    setTimeout(() => {
+      this.spinnerService.requestEnded();
+      this.nearByPlaces = placesMap[placeType] || [];
+    }, 750);
   }
 
-  showAtms(){
-    this.atms.forEach(element => {
-      console.log(element);
-    });
-  }
-
-  showSupermarkets(){
-    this.superMarkets.forEach(element => {
-      console.log(element);
-    });
-  }
-
-  showHealthCenters(){
-    this.healthCenters.forEach(element => {
-      console.log(element);
-    });
-  }
 
   searchByLatLngAndRadius(){
     this.nearByPlaces = [];
@@ -125,19 +96,26 @@ export class AppComponent implements OnInit{
             this.nearByPlaces.push(place);          
             this.filterPlaces(place);
           }
-          
       },  this.spinnerService.requestEnded(),
-      console.log(this.healthCenters)
-
       );
     }, (error) => {
       console.error(error);
     });
+    this.searchedInRadius = true;
   }
 
   clearMap(){
+    if(this.checkInputs()){ 
+      this.toastr.error('There is no data', 'ERROR');
+      return;
+    }
     this.spinnerService.requestStarted();;
     this.nearByPlaces = [];
+    this.atms = [];
+    this.healthCenters = [];
+    this.stores = [];
+    this.restaurants = []
+    this.searchedInRadius = false;
     this.latitude = 0;
     this.longitude = 0;
     setTimeout(() => {
@@ -149,7 +127,6 @@ export class AppComponent implements OnInit{
   //i wanted to check here as well to ensure accurate results. 
   //Anyone who wants to test whether the backend is functioning or not, can remove the 
   //'if' block under the subscribe function and try.
-
   calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const earthRadius = 6371;
     const degToRad = Math.PI / 180;
@@ -179,6 +156,27 @@ export class AppComponent implements OnInit{
         }         
       }
     }
+  }
+  
+  filterHealthCenters(place){
+    let healthCenterKeyWords = ["hospital","doctor","health"]
+    this.filterPlace(place,healthCenterKeyWords,this.healthCenters);
+  }
+
+  filterRestaurants(place){
+    let restaurantKeywords = ["restaurant","bar","cafe","food","meal_takeaway","meal_delivery"];
+    this.filterPlace(place,restaurantKeywords,this.restaurants);  
+  }
+
+  filterStores(place){
+    let supermarketKeywords = ["supermarket","store","shoe_store"
+    ,"clothing_store","electronics_store","home_goods_store","jewelry_store"];
+    this.filterPlace(place,supermarketKeywords,this.stores);  
+  }
+
+  filterAtms(place){
+    let atmKeywords = ["atm","finance","bank"];
+    this.filterPlace(place,atmKeywords,this.atms);  
   }
 
   checkInputs(){

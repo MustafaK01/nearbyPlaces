@@ -43,18 +43,11 @@
                 <div class="card">
                   <div class="card-body">
                     <google-map height="380px" width="700px" 
-                    [center]="center" [zoom]="5" 
+                    [center]="center" [zoom]="7" 
                     (mapClick)="selectLocation($event)">
                       <ng-container *ngFor="let marker of nearByPlaces">
                         <map-marker [position]="{ lat: marker.latitude, lng: marker.longitude }" 
-                                    [options]="mapOptions.nearbyPlacesMarkerOptions" 
-                                    *ngIf="showAll">
-                        </map-marker>
-                      </ng-container>
-                      <ng-container *ngFor="let marker of restaurants">
-                        <map-marker [position]="{ lat: marker.latitude, lng: marker.longitude }" 
-                                    [options]="mapOptions.nearbyPlacesMarkerOptions" 
-                                    *ngIf="showRestaurants">
+                                    [options]="mapOptions.nearbyPlacesMarkerOptions">
                         </map-marker>
                       </ng-container>
                       <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
@@ -79,17 +72,17 @@
         <div class="col-12" style="margin-right: 25%;">
           <div style="margin-right: 0%" class="row">
             <div class="col-3">
-              <button (click)="showHealthCenters()" class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
+              <button [disabled]="!searchedInRadius" (click)="showPlaces('healthCenters')" class="button-23" role="button"><i class="fas fa-hospital fa-lg"></i></button>
             </div>
             <div class="col-3">
-              <button (click)="showRestaurants()" class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
+              <button [disabled]="!searchedInRadius" (click)="showPlaces('restaurants')" class="button-23" role="button"><i class="fas fa-cutlery fa-lg" aria-hidden="true"></i></button>
             </div>
             <div class="col-3">
-              <button (click)="showSupermarkets()" class="button-23" role="button"><i class="fas fa-cart-shopping fa-lg" aria-hidden="true"></i></button>
+              <button [disabled]="!searchedInRadius" (click)="showPlaces('superMarkets')" class="button-23" role="button"><i class="fas fa-cart-shopping fa-lg" aria-hidden="true"></i></button>
             </div>
             <div class="col-3">
-              <button (click)="showAtms()" class="button-23" role="button">
-                <img src="../assets/atm_icon.png" alt="" style="height: 26px;" srcset="">
+              <button [disabled]="!searchedInRadius"  (click)="showPlaces('atms')" class="button-23" role="button">
+                <img [style.opacity]="searchedInRadius ? '1' : '0.15'" src="../assets/atm_icon.png" alt="" style="height: 26px;" srcset="">
               </button>
             </div>
           </div>
