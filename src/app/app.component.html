@@ -42,12 +42,13 @@
             <div class="col-12"> 
                 <div class="card">
                   <div class="card-body">
-                    <google-map height="380px" width="700px" 
+                    <google-map height="380px" width="700px"
                     [center]="center" [zoom]="7" 
                     (mapClick)="selectLocation($event)">
                       <ng-container *ngFor="let marker of nearByPlaces">
                         <map-marker [position]="{ lat: marker.latitude, lng: marker.longitude }" 
-                                    [options]="mapOptions.nearbyPlacesMarkerOptions">
+                                    [options]="mapOptions.nearbyPlacesMarkerOptions"
+                                    (mapClick)="selectMarker(marker)">
                         </map-marker>
                       </ng-container>
                       <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
@@ -93,17 +94,17 @@
       <div class="row mt-1 justify-content-center"></div>
       <div class="row mt-5 justify-content-center">
         <div class="col-12">
-          <h6>Nearby Places In {{radius}}m To Location</h6>
+          <h6>Nearby Places In <b><i>{{radius}}m</i></b> To Selected Location</h6>
         </div>
       </div>
       <div class="row mt-2 mb-2 justify-content-center">
         <div style="overflow-y: scroll; height: 400px">
 <!--  -->
-          <div *ngFor="let place of nearByPlaces" class="card">
-            <div class="card-body">
-                {{place.name}}
-            </div>
-          </div>
+      <div *ngFor="let place of nearByPlaces" class="card" [ngClass]="{'selected': place.selected}">
+        <div *ngIf="nearByPlaces.length>0" class="card-body">
+          {{ place.name}} - {{place.distance}}m uzaklıkta
+        </div>
+      </div>
 <!--  -->
         </div>
       </div>

@@ -48,7 +48,15 @@ export class AppComponent implements OnInit{
     this.circleOptions.radius = Number(this.radius);
     this.circleUpdated = !this.circleUpdated;
   }
-  
+
+  selectMarker(place: NearByPlace) {
+    this.nearByPlaces.forEach((p) => {
+      if (p !== place) {
+        p.selected = false;
+      }
+    });
+    place.selected = !place.selected;  }
+
   selectLocation(event: google.maps.MapMouseEvent) {
     if(this.latitude!=0 && this.longitude!=0){ 
       this.clearMap();
@@ -90,8 +98,10 @@ export class AppComponent implements OnInit{
     +'&longitude='+this.longitude+'&radius='+this.radius).subscribe((response:any) => {
       console.log(response.nearbyPlaces);
       response.nearbyPlaces.forEach(element => {
+        let distance = this.calculateDistance(this.latitude,this.longitude,element.latitude,element.longitude).toFixed(0);
         let place = new NearByPlace(element.latitude,element.longitude
-          ,element.name,element.rating,element.types,element.vicinity);
+          ,element.name,element.rating,element.types,element.vicinity
+          ,distance);
           if(this.checkLocationDistance(place.latitude,place.longitude)) {
             this.nearByPlaces.push(place);          
             this.filterPlaces(place);
@@ -106,7 +116,7 @@ export class AppComponent implements OnInit{
 
   clearMap(){
     if(this.checkInputs()){ 
-      this.toastr.error('There is no data', 'ERROR');
+      this.toastr.error('Please provide latitude and longitude', 'ERROR');
       return;
     }
     this.spinnerService.requestStarted();;

@@ -6,14 +6,17 @@ export class NearByPlace{
     rating:number;
     types:string[]
     vicinity:string;
-
-    constructor(latitude,longitude,name,rating,types,vicinity){
+    selected: boolean;
+    distance:number;
+    constructor(latitude,longitude,name,rating,types,vicinity,distance){
         this.latitude=latitude;
         this.longitude = longitude;
         this.name=name;
         this.rating = rating;
         this.types = types;
         this.vicinity = vicinity;
+        this.selected = false;
+        this.distance = distance;
     }
 
 
