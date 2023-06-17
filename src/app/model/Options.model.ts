@@ -25,11 +25,4 @@ export class MapOptions {
         }
     };
 
-    // circleOptions: CircleOptions = {
-    //     strokeColor: 'blue',
-    //     fillColor: 'gray',
-    //     radius: this.radius
-    // };
-
-
 }
