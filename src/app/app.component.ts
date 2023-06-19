@@ -89,6 +89,10 @@ export class AppComponent implements OnInit{
 
   searchByLatLngAndRadius(){
     this.nearByPlaces = [];
+    this.atms = [];
+    this.healthCenters = [];
+    this.stores = [];
+    this.restaurants = []
     if(this.radius>20000){
       this.toastr.error('Radius cannot be greater than 20km ', 'WARNING');
       return;
@@ -101,7 +105,6 @@ export class AppComponent implements OnInit{
     this.spinnerService.requestStarted();
     this.http.get('http://localhost:8070/api/location-service/getNearbyPlaces?latitude='+this.latitude
     +'&longitude='+this.longitude+'&radius='+this.radius).subscribe((response:any) => {
-      console.log(response.nearbyPlaces);
       response.nearbyPlaces.forEach(element => {
         let distance = this.calculateDistance(this.latitude,this.longitude,element.latitude,element.longitude).toFixed(0);
         let place = new NearByPlace(element.latitude,element.longitude
