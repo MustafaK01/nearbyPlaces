@@ -51,6 +51,10 @@
                                     (mapClick)="selectMarker(marker)">
                         </map-marker>
                       </ng-container>
+                        
+                      <map-directions-renderer *ngIf="(directionsResults | async) as directions"
+                      [directions]="directions"></map-directions-renderer>
+                      
                       <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
                       [position]="{ lat: latitude, lng: longitude }" 
                       [options]="mapOptions.selectedLocationMarkerOptions"></map-marker>

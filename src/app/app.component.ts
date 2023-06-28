@@ -4,6 +4,8 @@ import { NearByPlace } from './model/NearbyPlace.model';
 import { MapOptions } from './model/Options.model';
 import { SpinnerService } from './services/spinner.service';
 import { ToastrService } from 'ngx-toastr';
+import { Observable, map } from 'rxjs';
+import { MapDirectionsService } from '@angular/google-maps';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +29,9 @@ export class AppComponent implements OnInit{
 
   center: google.maps.LatLngLiteral = { lat: 41, lng: 35 };
   mapOptions: MapOptions;
+  directionsResults: Observable<google.maps.DirectionsResult>;
 
-  constructor(private http: HttpClient,private spinnerService:SpinnerService, private toastr: ToastrService) {
+  constructor(private mapDirectionsService: MapDirectionsService,private http: HttpClient,private spinnerService:SpinnerService, private toastr: ToastrService) {
     this.mapOptions = new MapOptions();
    }
 
@@ -63,6 +66,18 @@ export class AppComponent implements OnInit{
     }
     this.latitude = event.latLng.lat();
     this.longitude = event.latLng.lng();
+  }
+
+  selectDestination(){
+    const request: google.maps.DirectionsRequest = {
+      destination: {lat: 39.92507452776022, lng: 32.83693313598633},
+      origin: {lat: 36.20305332274913, lng: 36.160243452034294},
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+
+    this.directionsResults = this.mapDirectionsService.route(request).pipe(
+      map(response => response.result)
+    );
   }
 
   filterPlaces(place){
