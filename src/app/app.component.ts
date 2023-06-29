@@ -19,6 +19,7 @@ export class AppComponent implements OnInit{
   radius = 1500; 
   circleUpdated = false;
   searchedInRadius = false;
+  showDirections = false;
 
   nearByPlaces: NearByPlace[] = [];
   healthCenters:NearByPlace[] = [];
@@ -53,12 +54,17 @@ export class AppComponent implements OnInit{
   }
 
   selectMarker(place: NearByPlace) {
+    this.showDirections = true;
     this.nearByPlaces.forEach((p) => {
       if (p !== place) {
         p.selected = false;
       }
-    });
-    place.selected = !place.selected;  }
+    });    
+    place.selected = !place.selected;
+    let destination = {destinationLat:place.latitude,destinationLng:place.longitude};
+    let origin = {originLat:this.latitude,originLng:this.longitude};
+    this.selectDestination(destination,origin);
+  }
 
   selectLocation(event: google.maps.MapMouseEvent) {
     if(this.latitude!=0 && this.longitude!=0){ 
@@ -68,10 +74,10 @@ export class AppComponent implements OnInit{
     this.longitude = event.latLng.lng();
   }
 
-  selectDestination(){
+  selectDestination({destinationLat,destinationLng},{originLat,originLng}){
     const request: google.maps.DirectionsRequest = {
-      destination: {lat: 39.92507452776022, lng: 32.83693313598633},
-      origin: {lat: 36.20305332274913, lng: 36.160243452034294},
+      destination: {lat: destinationLat, lng: destinationLng},
+      origin: {lat: originLat, lng: originLng},
       travelMode: google.maps.TravelMode.DRIVING
     };
 
@@ -99,6 +105,7 @@ export class AppComponent implements OnInit{
       this.spinnerService.requestEnded();
       this.nearByPlaces = placesMap[placeType] || [];
     }, 750);
+    this.showDirections = false;
   }
 
 
@@ -107,7 +114,8 @@ export class AppComponent implements OnInit{
     this.atms = [];
     this.healthCenters = [];
     this.stores = [];
-    this.restaurants = []
+    this.restaurants = [];
+    this.showDirections = false;
     if(this.radius>20000){
       this.toastr.error('Radius cannot be greater than 20km ', 'WARNING');
       return;
@@ -151,6 +159,7 @@ export class AppComponent implements OnInit{
     this.searchedInRadius = false;
     this.latitude = 0;
     this.longitude = 0;
+    this.showDirections = false;
     setTimeout(() => {
       this.spinnerService.requestEnded();
     }, 1000)

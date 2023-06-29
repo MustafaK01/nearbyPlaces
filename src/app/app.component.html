@@ -52,7 +52,7 @@
                         </map-marker>
                       </ng-container>
                         
-                      <map-directions-renderer *ngIf="(directionsResults | async) as directions"
+                      <map-directions-renderer *ngIf="showDirections && (directionsResults | async) as directions"
                       [directions]="directions"></map-directions-renderer>
                       
                       <map-marker *ngIf="latitude !== 0 && longitude !== 0" 
